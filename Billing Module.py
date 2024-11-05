@@ -44,7 +44,7 @@ alert = driver.switch_to.alert
 print("Alert text:", alert.text)
 alert.accept()
 
-# Wait for a change on the page (e.g., a new element to appear)
+
 try:
     success_message = driver.find_element(By.XPATH, "//*[contains(text(), 'Welcome')]")
     print("Button clicked successfully, Somos Dashboard is being displayed:")
