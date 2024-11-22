@@ -30,6 +30,8 @@ credentials = read_credentials(r'D:\Users\SBilal.ctr\Downloads\credentials.csv')
 username = credentials[0]['username']
 password = credentials[0]['password']
 
+
+
 # Enter login credentials
 username_field = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "loginName")))  # Replace with your field locator
 username_field.send_keys(username)  # Correct usage
@@ -54,6 +56,18 @@ except:
 
 numberadminhistory_btn =driver.find_element(By.XPATH,"//span[normalize-space()='Number Admin History Report']")
 numberadminhistory_btn.click()
+
+numberadminhistory_search =driver.find_element(By.ID,"ctl00_CPHContent_TxtNumber")
+numberadminhistory_search.send_keys("80020898275454545454")
+
+numberadminhistory_gobtn =driver.find_element(By.ID,"ctl00_CPHContent_ImgSumbit")
+numberadminhistory_gobtn.click()
+
+rows=driver.find_elements(By.XPATH,"/html/body/form/div[3]/div/div[2]/div[2]/table/tbody/tr[1]/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/div/div/table/tbody/tr")
+if len(rows) >= 2:
+    print("Number Administration History Report data Fetched Successfully")
+else:
+    print("No Record(s) Found.")
 
 # Find all hyperlinks on the page
 links = driver.find_elements(By.TAG_NAME, "a")
@@ -85,17 +99,7 @@ print(f"\nTotal links: {total_links}")
 print(f"Working links: {working_links}")
 print(f"Not working links: {not_working_links}")
 
-numberadminhistory_search =driver.find_element(By.ID,"ctl00_CPHContent_TxtNumber")
-numberadminhistory_search.send_keys("80020898275454545454")
 
-numberadminhistory_gobtn =driver.find_element(By.ID,"ctl00_CPHContent_ImgSumbit")
-numberadminhistory_gobtn.click()
-
-rows=driver.find_elements(By.XPATH,"/html/body/form/div[3]/div/div[2]/div[2]/table/tbody/tr[1]/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/div/div/table/tbody/tr")
-if len(rows) >= 2:
-    print("Number Administration History Report data Fetched Successfully")
-else:
-    print("No Record(s) Found.")
 # time.sleep(10)
 # expected_title="Somos Portal Home Page | Somos"
 # if actual_title==expected_title:

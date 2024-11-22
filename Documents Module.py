@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 # Function to read credentials from CSV
 def read_credentials(filename):
     with open(filename, mode='r') as file:
@@ -43,6 +44,16 @@ WebDriverWait(driver, 10).until(EC.alert_is_present())
 alert = driver.switch_to.alert
 print("Alert text:", alert.text)
 alert.accept()
+
+# Start the timer
+start_time = time.time()
+# Measure the time it took to load the page
+end_time = time.time()
+
+# Calculate the page load time
+page_load_time = end_time - start_time;
+
+print(f"Page load time: {page_load_time} seconds")
 
 # Wait for a change on the page (e.g., a new element to appear)
 try:
@@ -99,13 +110,13 @@ attachment1_btn = WebDriverWait(driver, 10).until(
 )
 attachment1_btn.click()
 # Step 3: Provide the absolute file path
-file_path = r'D:\Users\SBilal.ctr\Downloads\credentials.csv'  # Use raw string to handle backslashes
-
-# Step 4: Upload the file
-attachment_btn.send_keys(file_path)
-
-# Optional: Wait to see the result of the upload
-WebDriverWait(driver, 10).until(
-    EC.text_to_be_present_in_element((By.ID, "some_result_element_id"), "Upload Successful")  # Change as needed
-)
-time.sleep(10)
+# file_path = r'D:\Users\SBilal.ctr\Downloads\credentials.csv'  # Use raw string to handle backslashes
+#
+# # Step 4: Upload the file
+# attachment_btn.send_keys(file_path)
+#
+# # Optional: Wait to see the result of the upload
+# WebDriverWait(driver, 10).until(
+#     EC.text_to_be_present_in_element((By.ID, "some_result_element_id"), "Upload Successful")  # Change as needed
+# )
+# time.sleep(10)

@@ -7,8 +7,21 @@ from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.options import Options as EdgeOptions
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core import driver
 from webdriver_manager.firefox import GeckoDriverManager
+
+def test_layout_responsive(driver, url):
+    # Define screen resolutions for mobile, tablet, and desktop
+    resolutions = {
+        'Mobile': (375, 667),  # Example mobile resolution (iPhone 6)
+        'Tablet': (768, 1024),  # Example tablet resolution (iPad)
+        'Desktop': (1366, 768)  # Example desktop resolution (1366x768)
+    }
+
+    
 
 
 def initialize_browser(browser_name):
@@ -49,7 +62,7 @@ def read_credentials(filename):
     - filename: The path to the CSV file containing credentials.
 
     Returns:
-    - credentials: A list with username and password
+    - credentials: A list of dictionaries with username and password
     """
     with open(filename, mode='r') as file:
         reader = csv.DictReader(file)
@@ -58,7 +71,16 @@ def read_credentials(filename):
 
 
 def perform_test(driver, credentials):
+    """
+    Perform the login and functionality test.
 
+    Args:
+    - driver: The WebDriver instance to interact with the browser.
+    - credentials: The login credentials to use for the test.
+
+    Returns:
+    - None
+    """
     # Open the portal
     driver.get('https://qa-portal.somos.com/')
     driver.maximize_window()
@@ -68,6 +90,7 @@ def perform_test(driver, credentials):
         print("Title Fetched Successfully")
     else:
         print("Somos Portal is down,Something went wrong!!")
+        driver.quit()
     time.sleep(2)
 
     # Extract credentials
@@ -89,31 +112,7 @@ def perform_test(driver, credentials):
     print("Alert text:", alert.text)
     alert.accept()
 
-    try:
-        success_message = driver.find_element(By.XPATH, "//*[contains(text(), 'Welcome')]")
-        print("Button clicked successfully, Somos Dashboard is being displayed:")
-    except:
-        print("Button click failed")
-    time.sleep(5)
-
-    # Navigate to "Number Admin History Report"
-    numberadminhistory_btn = driver.find_element(By.XPATH, "//span[normalize-space()='Number Admin History Report']")
-    numberadminhistory_btn.click()
-
-    numberadminhistory_search = driver.find_element(By.ID, "ctl00_CPHContent_TxtNumber")
-    numberadminhistory_search.send_keys("8002089827")
-
-    numberadminhistory_gobtn = driver.find_element(By.ID, "ctl00_CPHContent_ImgSumbit")
-    numberadminhistory_gobtn.click()
-
-    rows = driver.find_elements(By.XPATH,
-                                "/html/body/form/div[3]/div/div[2]/div[2]/table/tbody/tr[1]/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/div/div/table/tbody/tr")
-    if len(rows) >= 1:
-        print("Number Administration History Report data Fetched Successfully")
-    else:
-        print("No Record(s) Found.")
-
-    # Check the links on the page
+    # Find all hyperlinks on the page
     links = driver.find_elements(By.TAG_NAME, "a")
 
     # Initialize counters
@@ -143,6 +142,31 @@ def perform_test(driver, credentials):
     print(f"Working links: {working_links}")
     print(f"Not working links: {not_working_links}")
 
+    try:
+        success_message = driver.find_element(By.XPATH, "//*[contains(text(), 'Welcome')]")
+        print("Button clicked successfully, Somos Dashboard is being displayed:")
+    except:
+        print("Button click failed")
+    time.sleep(5)
+
+    # Navigate to "Number Admin History Report"
+    numberadminhistory_btn = driver.find_element(By.XPATH, "//span[normalize-space()='Number Admin History Report']")
+    numberadminhistory_btn.click()
+
+    numberadminhistory_search = driver.find_element(By.ID, "ctl00_CPHContent_TxtNumber")
+    numberadminhistory_search.send_keys("80020898275454545454")
+
+    numberadminhistory_gobtn = driver.find_element(By.ID, "ctl00_CPHContent_ImgSumbit")
+    numberadminhistory_gobtn.click()
+
+    rows = driver.find_elements(By.XPATH,
+                                "/html/body/form/div[3]/div/div[2]/div[2]/table/tbody/tr[1]/td/div/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/div/div/table/tbody/tr")
+    if len(rows) >= 2:
+        print("Number Administration History Report data Fetched Successfully")
+    else:
+        print("No Record(s) Found.")
+
+
 
 def main():
     # Define browsers to test
@@ -161,6 +185,7 @@ def main():
             print(f"Error occurred in {browser.capitalize()}: {e}")
         finally:
             driver.quit()
+
 
 
 if __name__ == "__main__":
