@@ -12,7 +12,7 @@ def test_layout_responsive(driver, url):
         'Desktop': (1366, 768)  # desktop resolution (1366x768)
     }
 
-    # Open the website
+    # Open the DESIRED Website
     driver.get(url)
     driver.maximize_window()  # Start with the maximized window for testing
 
